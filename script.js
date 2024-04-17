@@ -4,7 +4,7 @@ const resetEl = document.getElementById("reset");
 const timerEl = document.getElementById("timer");
 var currentExercise = document.getElementById("currentExercise").innerText;
 
-function randomIntFromInterval(min, max) { // min and max included 
+function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 randomWarmup = randomIntFromInterval(300, 420)
@@ -16,6 +16,9 @@ let timerRunning = false;
 function updateTimer() {
     if (currentExercise == "Workout Time!"){
         document.getElementById("currentExercise").innerText = "Warm-Up!"
+        if (timeLeft == 0){
+            timeLeft = randomIntFromInterval(300, 420)
+        }
     }
     let minutes = Math.floor(timeLeft / 60);
     let seconds = timeLeft % 60;
@@ -48,8 +51,9 @@ function stopTimer() {
 
 function resetTimer() {
     clearInterval(interval);
-    timeLeft = 1500;
+    timeLeft = 0;
     updateTimer();
+    document.getElementById("currentExercise").innerText = "Workout Time!"
     timerRunning = false;
 }
 
