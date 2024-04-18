@@ -1,42 +1,50 @@
+//grabbing id's from index.html
 const startEl = document.getElementById("start");
 const stopEl = document.getElementById("stop");
 const resetEl = document.getElementById("reset");
 const timerEl = document.getElementById("timer");
 var mainName = document.getElementById("currentExercise").innerText;
+let originalContent = document.getElementById("currentExercise").innerText;
 
+//making the random functions 
 function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 function get_random (list) {
     return list[Math.floor((Math.random()*list.length))];
 }
+
+//setting all the variables 
 randomWarmuptime = randomIntFromInterval(300, 420)
 let interval;
 let timeLeft = randomWarmuptime;
 let timerRunning = false;
-let currentTotalTime = 0;
-let warmupExercises = ["Jog", "Walk Slowly", "Arm Circles", "High Kicks", "Lunges", "Squats", "Shoulder Rolls"];
+let timeSinceLastExcersice = 0;
+//Exercise sets
+let warmupExercises = ["Jog", "Walk Slowly", "Arm Circles", "High Kicks", "Lunges", "Squats", "Shoulder Rolls"];//random 10s-15s
+let legExercises = ["Army Squats", "Jumping Jacks", "Calf Raises", "Squats", "[R] Lunges", "[L] Lunges", "[R] Step-up on Block", "[L] Step-up on Block", "[Both] Step-up on Block"];//30s + 10s 
+let upperExercises = ["Pushups", "Pike Pushups", "Plank", "Leg Lift to Roof", "Ankle Taps", "Pushups", "Roof Raises", "Sit Ups", "Plank", "Bicycle Crunches", "Arm Circles", "Ball Pushups", "[R] Plank", "[L] PLank"];//45s + 10s 
+let warmupExerciseChosen = get_random(warmupExercises);
 
 function updateTimer() {
-    if (mainName == "Workout Time!"){
-        document.getElementById("currentExercise").innerText = "Warm-Up!"
+    if (mainName == originalContent){
+        document.getElementById("currentExercise").innerText = "Warm-Up!";
         mainName = "Warm-Up!";
-        if (timeLeft == 0){
-            timeLeft = randomIntFromInterval(300, 420)
-        }
     }
+    timeSinceLastExcersice++
+    if (mainName == 'Warm-Up!' || mainName == warmupExerciseChosen){
+        if (timeSinceLastExcersice == randomIntFromInterval(1, 5)){
+            warmupExerciseChosen = get_random(warmupExercises);
+            document.getElementById("currentExercise").innerText = warmupExerciseChosen;
+            mainName = warmupExerciseChosen;
+            console.log(warmupExerciseChosen);
+            timeSinceLastExcersice = 0;
+        }
+    };
     let minutes = Math.floor(timeLeft / 60);
     let seconds = timeLeft % 60;
     let formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-    currentTotalTime++
-    if (mainName == 'Warm-Up!' || mainName == warmupExercises){
-        if (currentTotalTime == randomIntFromInterval(10, 15)){
-            let warmupExerciseChosen = get_random(warmupExercises);
-            document.getElementById("currentExercise").innerText = warmupExerciseChosen;
-            console.log(warmupExerciseChosen);
-            currentTotalTime = 0;
-        }
-    };
+    
     timerEl.innerHTML = formattedTime;
 }
 
@@ -64,9 +72,10 @@ function stopTimer() {
 
 function resetTimer() {
     clearInterval(interval);
-    timeLeft = 0;
     updateTimer();
-    document.getElementById("currentExercise").innerText = "Workout Time!"
+    document.getElementById("currentExercise").innerText = "Warm-Up!";
+    timeLeft = randomIntFromInterval(300, 420);
+    timeSinceLastExcersice=0;
     timerRunning = false;
 }
 
