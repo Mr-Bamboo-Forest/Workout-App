@@ -7,12 +7,10 @@ var mainName = document.getElementById("currentExercise").innerText;
 function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
-randomWarmuptime = randomIntFromInterval(300, 420)
 function get_random (list) {
     return list[Math.floor((Math.random()*list.length))];
 }
-
-
+randomWarmuptime = randomIntFromInterval(300, 420)
 let interval;
 let timeLeft = randomWarmuptime;
 let timerRunning = false;
